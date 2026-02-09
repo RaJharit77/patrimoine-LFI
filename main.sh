@@ -123,11 +123,5 @@ else
     curl -L -o "$JAR_NAME" "$LINK"
 fi
 
-# Check if the jar file was downloaded successfully
-if [ -f "$JAR_NAME" ]; then
-    echo "Lancement de $JAR_NAME..."
-    java -Dpatrimoine.mode=OFFLINE -jar "$JAR_NAME"
-else
-    echo "Erreur : le fichier $JAR_NAME n'a pas pu être téléchargé."
-    exit 1
-fi  
+echo "Lancement de $JAR_NAME..."
+java -Dpatrimoine.mode=OFFLINE -jar "$JAR_NAME"

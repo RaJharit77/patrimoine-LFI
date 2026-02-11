@@ -1,5 +1,15 @@
 #!/bin/bash
 
+# Placeholders
+MOI=$1
+SEX=$2
+PETIT_COPAIN_OU_PETITE_COPINE=$([[ "$SEX" == "M" ]] && echo "PetiteCopine" || echo "PetitCopain")
+
+# Detect windows
+is_windows() {
+    [[ "$OSTYPE" == "msys" || "$OSTYPE" == "win32" || "$OSTYPE" == "cygwin" ]]
+}
+
 # Paths
 PATRIMOINE_DIR="$HOME/.patrimoine"
 JAR_PATTERN="$HOME/patrimoine@*.jar"
@@ -10,7 +20,7 @@ if [ -z "$HOME" ]; then
     exit 1
 fi
 
-echo "This script will remove :"
+echo "This script will remove and recreate:"
 echo "$PATRIMOINE_DIR"
 
 # Verify existing JARs
@@ -55,7 +65,78 @@ else
     echo "No folders to delete"
 fi
 
-# Delete the JARs
+# Config
+PATRIMOINE_BASE_DIR="$HOME/.patrimoine"
+PATRIMOINE_DOWNLOAD_SUB_DIRS=("planifies" "realises" "justificatifs")
+
+# Creating Patrimoine Directories
+create_patrimoine_directories() {
+    echo "[START] - Creating necessary patrimoine folders"
+    for sub_dir in "${PATRIMOINE_DOWNLOAD_SUB_DIRS[@]}"; do
+        mkdir -p "$PATRIMOINE_BASE_DIR/download/$sub_dir"
+    done
+    echo "[FINISHED] - Creating necessary patrimoine folders"
+}
+
+# Download templates if not downloaded yet
+download_file() {
+    local url="$1"
+    local dest="$2"
+
+    if command -v curl &>/dev/null; then
+        if is_windows; then
+            curl --ssl-no-revoke -L -o "$dest" "$url"
+        else
+            curl -L -o "$dest" "$url"
+        fi
+    elif command -v wget &>/dev/null; then
+        wget -O "$dest" "$url"
+    else
+        echo "Erreur : ni curl ni wget n'est installé" >&2
+        exit 1
+    fi
+}
+
+# Replace placeholders in filename and content
+replace_placeholders_in_file() {
+    local file="$1"
+
+    # --- New filename ---
+    local new_file="$file"
+    new_file="${new_file/MOI/$MOI}"
+    new_file="${new_file/PETIT_COPAIN_OU_PETITE_COPINE/$PETIT_COPAIN_OU_PETITE_COPINE}"
+
+    if [ "$new_file" != "$file" ]; then
+        mv "$file" "$new_file"
+        file="$new_file"
+    fi
+
+    # --- Replace inside file ---
+    sed -i.bak "s/\$MOI/$MOI/g; s/\$PETIT_COPAIN_OU_PETITE_COPINE/$PETIT_COPAIN_OU_PETITE_COPINE/g" "$file" && rm "${file}.bak"
+}
+
+TEMPLATE_BASE_URL="https://raw.githubusercontent.com/Sheddy00/patrimoine-LFI/refs/heads/main/templates"
+TEMPLATE_FILE_NAMES=("CasSet.tout.md" "MOI.cas.md" "Parents.cas.md" "PETIT_COPAIN_OU_PETITE_COPINE.cas.md")
+
+echo ""
+echo "[START] - Downloading templates"
+DOWNLOAD_DIR="$PATRIMOINE_BASE_DIR/download/realises"
+for name in "${TEMPLATE_FILE_NAMES[@]}"; do
+    url="$TEMPLATE_BASE_URL/$name"
+    local filename="$(basename "$url")"
+    local dest="$DOWNLOAD_DIR/$filename"
+
+    echo "[DOWNLOADING] $filename"
+    download_file "$url" "$dest"
+
+    echo "[REPLACING PLACEHOLDERS] $filename"
+    replace_placeholders_in_file "$dest"
+done
+
+echo "[FINISHED] All templates downloaded and placeholders replaced."
+cp -r "$PATRIMOINE_BASE_DIR/download/realises/"* "$PATRIMOINE_BASE_DIR/download/planifies/"
+
+# Delete the JARs if requested
 if [ "$DELETE_JAR" = true ]; then
     echo ""
     for jar in $JAR_FILES; do

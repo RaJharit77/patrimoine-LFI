@@ -22,9 +22,9 @@ LINK='https://www.dropbox.com/scl/fi/vq9tb9q4n7rxe1y1hlo3h/patrimoine-0.2.9.jar?
 JAR_NAME="patrimoine@${LAST_VERSION}.jar"
 USER_DIR="$HOME"
 
-cd "$USER_DIR" || { echo "Impossible d'accéder au dossier $USER_DIR"; exit 1; }
+cd "$USER_DIR" || { echo "Unable to access the file $USER_DIR"; exit 1; }
 
-echo "Vérification de la présence du fichier patrimoine.jar dans $USER_DIR..."
+echo "Checking for the patrimoine.jar file in $USER_DIR..."
 
 # Find existing jar files matching the pattern
 EXISTING_JAR=$(ls patrimoine@*.jar 2>/dev/null | head -n 1)
@@ -32,9 +32,9 @@ EXISTING_JAR=$(ls patrimoine@*.jar 2>/dev/null | head -n 1)
 if [ -n "$EXISTING_JAR" ]; then
     CURRENT_VERSION=$(echo "$EXISTING_JAR" | cut -d "@" -f 2 | cut -d "." -f 1-3)
     if [ "$CURRENT_VERSION" = "$LAST_VERSION" ]; then
-        echo "Vous avez déjà la dernière version : $EXISTING_JAR dans $(pwd)/$EXISTING_JAR"
+        echo "You already have the latest version : $EXISTING_JAR in $(pwd)/$EXISTING_JAR"
     else
-        echo "Ancienne version détectée : $CURRENT_VERSION. Suppression et téléchargement de la version $LAST_VERSION..."
+        echo "Old version detected : $CURRENT_VERSION. Deleting and downloading the version $LAST_VERSION..."
         rm -f "$EXISTING_JAR"
         if is_windows; then
             curl --ssl-no-revoke -L -o "$JAR_NAME" "$LINK"
@@ -43,8 +43,8 @@ if [ -n "$EXISTING_JAR" ]; then
         fi
     fi
 else
-    echo "Aucune version détectée. Téléchargement de la version $LAST_VERSION..."
-    echo "Le téléchargement peut prendre quelques instants..."
+    echo "No version detected. Downloading version $LAST_VERSION..."
+    echo "The download may take a few moments..."
     if is_windows; then
         curl --ssl-no-revoke -L -o "$JAR_NAME" "$LINK"
     else
@@ -52,5 +52,5 @@ else
     fi
 fi
 
-echo "Lancement de $JAR_NAME..."
+echo "Launching $JAR_NAME..."
 java -Dpatrimoine.mode=OFFLINE -jar "$JAR_NAME"

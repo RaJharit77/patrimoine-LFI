@@ -3,6 +3,23 @@
 # Placeholders
 MOI=$1
 SEX=$2
+
+# Parameters validation
+if [ -z "$MOI" ] || [ -z "$SEX" ]; then
+    echo "ERROR: Missing parameters"
+    echo "Usage: $0 <UserName> <M|F>"
+    exit 1
+fi
+
+# SEX validation
+if [[ ! "$SEX" =~ ^[MFmf]$ ]]; then
+    echo "ERROR: Invalid sex parameter"
+    echo ""
+    echo "The sex parameter must be M or F"
+    echo "You provided: $SEX"
+    exit 1
+fi
+
 PETIT_COPAIN_OU_PETITE_COPINE=$([[ "$SEX" == "M" ]] && echo "PetiteCopine" || echo "PetitCopain")
 
 # Detect windows
@@ -122,8 +139,8 @@ echo "[START] - Downloading templates"
 DOWNLOAD_DIR="$PATRIMOINE_BASE_DIR/download/realises"
 for name in "${TEMPLATE_FILE_NAMES[@]}"; do
     url="$TEMPLATE_BASE_URL/$name"
-    local filename="$(basename "$url")"
-    local dest="$DOWNLOAD_DIR/$filename"
+    filename="$(basename "$url")"
+    dest="$DOWNLOAD_DIR/$filename"
 
     echo "[DOWNLOADING] $filename"
     download_file "$url" "$dest"

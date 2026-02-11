@@ -92,7 +92,7 @@ download_file() {
     elif command -v wget &>/dev/null; then
         wget -O "$dest" "$url"
     else
-        echo "Erreur : ni curl ni wget n'est installé" >&2
+        echo "Error: Neither curl nor wget is installed" >&2
         exit 1
     fi
 }

@@ -11,8 +11,8 @@ Le script te demandera lors de l’exécution si tu veux le remplacer (o/N).
 bash <(curl -s https://raw.githubusercontent.com/Sheddy00/patrimoine-LFI/main/init.sh) UserName M
 ```
 
-- `UserName` : ton nom 
-- `M / F` : ton sexe
+- `UserName` : Rajoharitiana 
+- `M / F` : M
 
 ---
 
@@ -43,8 +43,8 @@ cd patrimoine-LFI
 bash init.sh UserName M
 ```
 
-- `UserName` : ton nom 
-- `M / F` : ton sexe
+- `UserName` : Rajoharitiana 
+- `M / F` : M
 
 ---
 

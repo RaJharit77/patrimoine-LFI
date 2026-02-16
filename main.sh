@@ -18,7 +18,7 @@ if [ ! -d "$REALISES_DIR" ] || [ -z "$(ls -A "$REALISES_DIR" 2>/dev/null)" ]; th
 fi
 
 LAST_VERSION="0.3.0" # put here the latest version number
-LINK='https://www.dropbox.com/scl/fi/kqlxmk7bqwndbiti6ce5j/patrimoine-0.3.0.jar?rlkey=uhq217mb70irmhqh1io74v46n&st=0m14soqa&dl=1'
+LINK='https://www.dropbox.com/scl/fi/tq91xi8ebfdcjy7c6likm/patrimoine-0.3.1.jar?rlkey=notdyc96ebi364zdbdyxdw90x&st=i8z4nxec&dl=1'
 JAR_NAME="patrimoine@${LAST_VERSION}.jar"
 USER_DIR="$HOME"
 

@@ -2,10 +2,8 @@
 
 ## Méthode 1 — Exécution directe
 
-### Étape 1 : Réinitialiser le dossier local (première utilisation)
+### Étape 1 : Initialiser ton environnement (première utilisation)
 À utiliser lors du premier lancement pour configurer ton environnement.
-Si ton fichier `.jar` fonctionne déjà correctement, tu n’as **pas besoin de le supprimer**.  
-Le script te demandera lors de l’exécution si tu veux le remplacer (o/N).
 
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/Sheddy00/patrimoine-LFI/main/init.sh) UserName M
@@ -17,8 +15,7 @@ bash <(curl -s https://raw.githubusercontent.com/Sheddy00/patrimoine-LFI/main/in
 ---
 
 ### Étape 2 : Lancer Patrimoine
-À utiliser après l'initialisation et pour tous les prochains démarrages.
-Le fichier .jar sera téléchargé automatiquement s'il n'existe pas, sinon on lance Patrimoine directement.
+À utiliser pour tous les démarrages quotidiens. Le fichier .jar sera téléchargé (après confirmation) s'il n'existe pas, sinon il se lancera directement.
 
 ```bash
 bash <(curl -s https://raw.githubusercontent.com/Sheddy00/patrimoine-LFI/main/main.sh)
@@ -37,7 +34,7 @@ cd patrimoine-LFI
 
 ---
 
-### Étape 2 : Réinitialiser l’environnement (première utilisation)
+### Étape 2 : Initialiser l’environnement (première utilisation)
 
 ```bash
 bash init.sh UserName M
@@ -63,5 +60,5 @@ bash main.sh
 
 ## Pour réinitialiser ou changer les informations utilisateur 
   1. Relance init.sh UserName M avec tes nouvelles informations
-  2. Le script te demandera si tu veux supprimer le .jar (choisis Non si fonctionnel)
+  2. Le script te demandera confirmation avant de supprimer tes anciens fichiers de données.
   3. Relance ensuite main.sh normalement

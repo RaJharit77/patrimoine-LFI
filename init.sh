@@ -20,7 +20,7 @@ if [[ ! "$SEX" =~ ^[MFmf]$ ]]; then
     exit 1
 fi
 
-PETIT_COPAIN_OU_PETITE_COPINE=$([[ "$SEX" == "M" ]] && echo "PetiteCopine" || echo "PetitCopain")
+PETIT_COPAIN_OU_PETITE_COPINE=$([[ "$SEX" == "M" || "$SEX" == "m" ]] && echo "PetiteCopine" || echo "PetitCopain")
 
 # Detect windows
 is_windows() {

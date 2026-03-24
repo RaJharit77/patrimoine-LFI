@@ -29,7 +29,6 @@ is_windows() {
 
 # Paths
 PATRIMOINE_DIR="$HOME/.patrimoine"
-JAR_PATTERN="$HOME/patrimoine@*.jar"
 
 # Security check
 if [ -z "$HOME" ]; then
@@ -37,30 +36,10 @@ if [ -z "$HOME" ]; then
     exit 1
 fi
 
-echo "This script will remove and recreate:"
+echo "This script will RESET your data and recreate:"
 echo "$PATRIMOINE_DIR"
 
-# Verify existing JARs
-JAR_FILES=$(ls $JAR_PATTERN 2>/dev/null)
-if [ -n "$JAR_FILES" ]; then
-    echo ""
-    echo "JAR file(s) detected :"
-    for jar in $JAR_FILES; do
-        echo " $jar"
-    done
-    echo ""
-    read -p "Do you want to delete the JAR file(s)? (y/N) : " -r
-    echo ""
-    DELETE_JAR=false
-    if [[ $REPLY =~ ^[OoYy]$ ]]; then
-        DELETE_JAR=true
-    fi
-else
-    DELETE_JAR=false
-fi
-
-echo ""
-read -p "Confirm deletion ? (y/N) : " -r
+read -p "Are you sure you want to proceed? This deletes all current templates. (y/N) : " -r
 echo ""
 
 if [[ ! $REPLY =~ ^[OoYy]$ ]]; then
@@ -69,7 +48,7 @@ if [[ ! $REPLY =~ ^[OoYy]$ ]]; then
 fi
 
 # Deletion of the .patrimoine folder
-echo "Deletion of $PATRIMOINE_DIR..."
+echo "Cleaning up $PATRIMOINE_DIR..."
 if [ -d "$PATRIMOINE_DIR" ]; then
     rm -rf "$PATRIMOINE_DIR"
     if [ $? -eq 0 ]; then
@@ -92,7 +71,7 @@ echo "[START] - Creating necessary patrimoine folders"
 for sub_dir in "${PATRIMOINE_DOWNLOAD_SUB_DIRS[@]}"; do
     mkdir -p "$PATRIMOINE_BASE_DIR/download/$sub_dir"
 done
-echo "[FINISHED] - Creating necessary patrimoine folders"
+echo "[FINISHED] - Folders created."
 
 # Download templates if not downloaded yet
 download_file() {
@@ -137,6 +116,7 @@ TEMPLATE_FILE_NAMES=("CasSet.tout.md" "MOI.cas.md" "Parents.cas.md" "PETIT_COPAI
 echo ""
 echo "[START] - Downloading templates"
 DOWNLOAD_DIR="$PATRIMOINE_BASE_DIR/download/realises"
+
 for name in "${TEMPLATE_FILE_NAMES[@]}"; do
     url="$TEMPLATE_BASE_URL/$name"
     filename="$(basename "$url")"
@@ -149,26 +129,12 @@ for name in "${TEMPLATE_FILE_NAMES[@]}"; do
     replace_placeholders_in_file "$dest"
 done
 
-echo "[FINISHED] All templates downloaded and placeholders replaced."
+echo "[FINISHED] All templates are ready."
 cp -r "$PATRIMOINE_BASE_DIR/download/realises/"* "$PATRIMOINE_BASE_DIR/download/planifies/"
 
-# Delete the JARs if requested
-if [ "$DELETE_JAR" = true ]; then
-    echo ""
-    for jar in $JAR_FILES; do
-        echo "Deletion of $jar..."
-        rm -f "$jar"
-        if [ $? -eq 0 ]; then
-            echo "File deleted successfully"
-        else
-            echo "Error during deletion"
-        fi
-    done
-fi
-
 echo ""
 echo "========================================="
-echo "Reset completed"
+echo "Initialization completed"
 echo "========================================="
-echo ""
-echo "You can now restart the main script"
+echo "Your profile ($MOI) has been set up."
+echo "You can now run your main script to launch the app."
